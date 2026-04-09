@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizza Express LS — Best Pizza in Maseru | Always Open</title>
+<meta name="description" content="Maseru's #1 rated pizza. Hot, fresh, always open. Order now for curbside pickup in Khubetsoana. Call +266 5656 0456.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root{
+  --red:#E8190C;--red2:#C01008;
+  --dark:#0F0A06;--dark2:#1A1008;
+  --cream:#FBF5E8;--gold:#F5A623;
+  --green:#22C55E;--muted:rgba(251,245,232,0.55);
+  --px:clamp(18px,5vw,64px);   /* universal side padding */
+  --section-py:clamp(60px,10vw,110px);
+}
+/* ── RESET ── */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{background:var(--dark);color:var(--cream);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden;min-width:320px;}
+img,svg{max-width:100%;display:block;}
+a{-webkit-tap-highlight-color:transparent;}
+
+/* ── URGENCY BAR ── */
+.urgency-bar{
+  background:var(--red);padding:10px 16px;
+  font-size:clamp(.68rem,.9vw,.78rem);font-weight:600;letter-spacing:.04em;
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  flex-wrap:wrap;text-align:center;line-height:1.4;
+}
+.urgency-bar .pulse-dot{width:8px;height:8px;background:#fff;border-radius:50%;flex-shrink:0;animation:pulse 1.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+.urgency-bar a{color:#fff;font-weight:700;text-decoration:underline;white-space:nowrap;}
+
+/* ── STICKY MOBILE CTA ── */
+.sticky-order{
+  position:fixed;bottom:0;left:0;right:0;z-index:190;
+  background:var(--red);padding:14px 20px;
+  text-align:center;box-shadow:0 -4px 30px rgba(232,25,12,.45);
+  display:none;
+}
+.sticky-order a{color:#fff;font-weight:700;font-size:1rem;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:40px;z-index:150;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px var(--px);
+  background:rgba(15,10,6,.94);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.logo{font-family:'Syne',sans-serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:800;letter-spacing:.02em;color:var(--cream);white-space:nowrap;}
+.logo span{color:var(--red);}
+.nav-links{list-style:none;display:flex;gap:clamp(16px,2.5vw,32px);align-items:center;}
+.nav-links a{color:var(--cream);opacity:.65;text-decoration:none;font-size:clamp(.68rem,.9vw,.78rem);font-weight:500;letter-spacing:.1em;text-transform:uppercase;transition:opacity .2s,color .2s;white-space:nowrap;}
+.nav-links a:hover{opacity:1;color:var(--gold);}
+.nav-order{background:var(--red)!important;color:#fff!important;opacity:1!important;padding:9px 18px!important;border-radius:6px;font-weight:700!important;box-shadow:0 0 20px rgba(232,25,12,.4);transition:background .2s,box-shadow .2s!important;}
+.nav-order:hover{background:var(--red2)!important;box-shadow:0 0 32px rgba(232,25,12,.6)!important;}
+
+/* Hamburger */
+.hamburger{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:40px;height:40px;background:none;border:none;cursor:pointer;padding:4px;
+}
+.hamburger span{display:block;height:2px;background:var(--cream);border-radius:2px;transition:transform .3s,opacity .3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* Mobile drawer */
+.mobile-menu{
+  display:none;position:fixed;inset:0;
+  background:rgba(15,10,6,.98);z-index:140;
+  flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.mobile-menu.open{opacity:1;pointer-events:all;}
+.mobile-menu a{
+  font-family:'Syne',sans-serif;font-size:clamp(1.6rem,6vw,2.4rem);font-weight:800;
+  color:var(--cream);text-decoration:none;letter-spacing:.04em;
+  transition:color .2s;
+}
+.mobile-menu a:hover{color:var(--red);}
+.mobile-menu .mm-order{
+  margin-top:12px;background:var(--red);color:#fff!important;
+  padding:16px 40px;border-radius:8px;
+  font-size:clamp(1rem,4vw,1.2rem)!important;
+  box-shadow:0 4px 24px rgba(232,25,12,.5);
+}
+
+/* ── HERO ── */
+.hero{
+  min-height:100svh;
+  display:flex;align-items:center;
+  position:relative;overflow:hidden;
+  padding:clamp(80px,12vw,120px) var(--px) clamp(100px,14vw,130px);
+}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 65% 50%,rgba(232,25,12,.18) 0%,transparent 65%),radial-gradient(ellipse 35% 40% at 85% 10%,rgba(245,166,35,.1) 0%,transparent 60%),#0F0A06;}
+.fire1,.fire2,.fire3{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;}
+.fire1{width:min(560px,80vw);height:min(560px,80vw);background:rgba(232,25,12,.14);right:5%;top:5%;animation:fb 9s ease-in-out infinite;}
+.fire2{width:min(320px,50vw);height:min(320px,50vw);background:rgba(245,166,35,.1);right:28%;bottom:10%;animation:fb 7s ease-in-out infinite;animation-delay:-3s;}
+.fire3{width:min(220px,35vw);height:min(220px,35vw);background:rgba(232,25,12,.09);left:2%;top:35%;animation:fb 11s ease-in-out infinite;animation-delay:-6s;}
+@keyframes fb{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-28px) scale(1.06);}}
+
+.hero-pizza-wrap{
+  position:absolute;right:clamp(-80px,-6vw,-20px);top:50%;
+  transform:translateY(-50%);
+  width:clamp(220px,42vw,640px);height:clamp(220px,42vw,640px);
+  filter:drop-shadow(0 0 100px rgba(232,25,12,.5));z-index:1;
+  pointer-events:none;
+}
+.pizza-ring{width:100%;height:100%;animation:spin 38s linear infinite;transform-origin:center;}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.hero-content{position:relative;z-index:2;max-width:min(640px,100%);}
+
+.social-proof-bar{
+  display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  padding:7px 14px;border-radius:50px;margin-bottom:24px;
+  font-size:clamp(.68rem,.9vw,.75rem);font-weight:500;
+}
+.stars-sm{color:var(--gold);letter-spacing:1px;}
+.proof-divider{width:1px;height:12px;background:rgba(255,255,255,.2);flex-shrink:0;}
+
+h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.4rem,7.5vw,5.6rem);
+  font-weight:800;line-height:.95;
+  color:var(--cream);margin-bottom:20px;
+}
+h1 .accent{color:var(--red);display:block;}
+h1 .ug{position:relative;display:inline-block;color:var(--gold);}
+h1 .ug::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:3px;background:var(--gold);border-radius:2px;transform:scaleX(0);transform-origin:left;animation:ul-in 1s .6s ease forwards;}
+@keyframes ul-in{to{transform:scaleX(1);}}
+
+.hero-sub{font-size:clamp(.9rem,1.8vw,1.05rem);line-height:1.75;color:var(--muted);margin-bottom:32px;max-width:480px;}
+.hero-sub strong{color:var(--cream);}
+
+.cta-group{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.btn-fire{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--red);color:#fff;
+  padding:clamp(14px,2.5vw,18px) clamp(22px,4vw,36px);
+  border-radius:8px;font-size:clamp(.88rem,1.5vw,1rem);font-weight:700;
+  text-decoration:none;box-shadow:0 4px 32px rgba(232,25,12,.5);
+  transition:transform .2s,box-shadow .2s,background .2s;
+  border:none;cursor:pointer;letter-spacing:.02em;white-space:nowrap;
+}
+.btn-fire:hover{transform:translateY(-3px);box-shadow:0 8px 48px rgba(232,25,12,.7);background:var(--red2);}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:var(--cream);
+  padding:clamp(13px,2.4vw,17px) clamp(18px,3vw,28px);
+  border-radius:8px;font-size:clamp(.82rem,1.4vw,.9rem);font-weight:600;
+  text-decoration:none;border:1.5px solid rgba(255,255,255,.2);
+  transition:border-color .2s,background .2s,transform .2s;
+  letter-spacing:.02em;white-space:nowrap;
+}
+.btn-ghost:hover{border-color:var(--cream);background:rgba(255,255,255,.05);transform:translateY(-3px);}
+
+.urgency-nudge{margin-top:18px;font-size:clamp(.72rem,1.2vw,.8rem);color:var(--gold);display:flex;align-items:center;gap:8px;font-weight:500;}
+
+.trust-strip{display:flex;gap:clamp(16px,3vw,32px);flex-wrap:wrap;margin-top:44px;padding-top:32px;border-top:1px solid rgba(255,255,255,.08);}
+.trust-item{display:flex;align-items:center;gap:10px;}
+.trust-icon{font-size:1.2rem;flex-shrink:0;}
+.trust-text strong{display:block;font-size:clamp(.82rem,1.3vw,.92rem);font-weight:700;color:var(--cream);}
+.trust-text span{font-size:.7rem;color:var(--muted);letter-spacing:.08em;}
+
+.scroll-cue{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;opacity:.3;animation:scue 2.5s ease-in-out infinite;}
+@keyframes scue{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
+.scroll-cue::after{content:'';width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,.4),transparent);}
+
+/* ── MARQUEE ── */
+.marquee-bar{background:var(--red);padding:11px 0;overflow:hidden;white-space:nowrap;}
+.marquee-inner{display:inline-flex;animation:mq 22s linear infinite;}
+.marquee-inner span{font-family:'Syne',sans-serif;font-size:clamp(.78rem,1.2vw,1rem);letter-spacing:.18em;color:#fff;padding:0 24px;}
+.marquee-dot{color:rgba(255,255,255,.35);}
+@keyframes mq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── NUMBERS ── */
+.numbers-section{
+  background:var(--cream);color:var(--dark);
+  padding:clamp(36px,6vw,60px) var(--px);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+.number-block{text-align:center;padding:clamp(14px,2.5vw,20px) 10px;border-right:1px solid rgba(15,10,6,.1);}
+.number-block:last-child{border-right:none;}
+.num-big{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;color:var(--red);line-height:1;}
+.num-label{font-size:clamp(.6rem,.9vw,.72rem);letter-spacing:.15em;text-transform:uppercase;opacity:.5;margin-top:6px;}
+
+/* ── SHARED SECTION STYLES ── */
+.section-chip{display:inline-block;background:rgba(232,25,12,.15);border:1px solid rgba(232,25,12,.3);color:var(--red);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border-radius:20px;font-weight:600;margin-bottom:18px;}
+.section-chip.gold{background:rgba(245,166,35,.12);border-color:rgba(245,166,35,.3);color:var(--gold);}
+h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;color:var(--cream);line-height:1.05;}
+h2 em{color:var(--red);font-style:normal;}
+.section-sub{font-size:clamp(.85rem,1.5vw,.95rem);color:var(--muted);line-height:1.7;margin-top:14px;}
+.offer-header{text-align:center;max-width:680px;margin:0 auto clamp(40px,6vw,64px);}
+
+/* ── DEALS ── */
+.offer-section{background:linear-gradient(135deg,#1c0e06 0%,#0F0A06 100%);padding:var(--section-py) var(--px);position:relative;overflow:hidden;}
+.offer-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(245,166,35,.07) 0%,transparent 70%);}
+.deals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,20px);max-width:1100px;margin:0 auto;position:relative;z-index:1;}
+.deal-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:clamp(20px,3vw,32px);position:relative;overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s;cursor:pointer;}
+.deal-card:hover{transform:translateY(-6px);border-color:rgba(232,25,12,.4);box-shadow:0 16px 60px rgba(232,25,12,.2);}
+.deal-card.featured{border-color:var(--red);background:linear-gradient(135deg,rgba(232,25,12,.12) 0%,rgba(15,10,6,0) 100%);box-shadow:0 0 40px rgba(232,25,12,.2);}
+.deal-badge{position:absolute;top:14px;right:14px;background:var(--red);color:#fff;font-size:.62rem;font-weight:700;letter-spacing:.08em;padding:4px 9px;border-radius:4px;text-transform:uppercase;}
+.deal-badge.gold{background:var(--gold);color:var(--dark);}
+.deal-emoji{font-size:clamp(2rem,3vw,2.6rem);margin-bottom:16px;}
+.deal-name{font-family:'Syne',sans-serif;font-size:clamp(1rem,2vw,1.25rem);font-weight:800;color:var(--cream);margin-bottom:8px;}
+.deal-desc{font-size:clamp(.78rem,1.3vw,.83rem);line-height:1.65;color:var(--muted);margin-bottom:18px;}
+.deal-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:16px;}
+.deal-price{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,3vw,2rem);font-weight:800;color:var(--gold);}
+.deal-old{font-size:.88rem;color:var(--muted);text-decoration:line-through;}
+.deal-cta{display:block;text-align:center;background:var(--red);color:#fff;padding:12px;border-radius:6px;font-size:.82rem;font-weight:700;text-decoration:none;letter-spacing:.04em;transition:background .2s;}
+.deal-cta:hover{background:var(--red2);}
+.scarcity{display:flex;align-items:center;gap:8px;font-size:.72rem;color:#F5A623;font-weight:500;margin-bottom:12px;}
+
+/* ── HOW IT WORKS ── */
+.how-section{background:var(--cream);color:var(--dark);padding:var(--section-py) var(--px);}
+.how-section h2{color:var(--dark);}
+.how-section h2 em{color:var(--red);}
+.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:clamp(36px,5vw,56px);max-width:1000px;margin-left:auto;margin-right:auto;position:relative;}
+.steps-row::before{content:'';position:absolute;top:36px;left:calc(12.5% + 16px);right:calc(12.5% + 16px);height:1px;background:rgba(232,25,12,.2);z-index:0;}
+.step{text-align:center;padding:0 clamp(8px,2vw,20px);position:relative;z-index:1;}
+.step-num{width:clamp(52px,8vw,72px);height:clamp(52px,8vw,72px);border-radius:50%;background:var(--dark);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:clamp(1.2rem,2.5vw,1.6rem);font-weight:800;margin:0 auto 18px;border:3px solid rgba(232,25,12,.15);transition:background .3s,border-color .3s;}
+.step:hover .step-num{background:var(--red);border-color:var(--red);color:#fff;}
+.step-title{font-family:'Syne',sans-serif;font-size:clamp(.85rem,1.4vw,1rem);font-weight:800;color:var(--dark);margin-bottom:8px;}
+.step-text{font-size:clamp(.72rem,1.2vw,.8rem);line-height:1.6;color:rgba(15,10,6,.55);}
+.how-cta{text-align:center;margin-top:clamp(36px,5vw,52px);}
+
+/* ── REVIEWS ── */
+.reviews-section{background:var(--dark2);padding:var(--section-py) var(--px);overflow:hidden;}
+.reviews-header{text-align:center;margin-bottom:clamp(36px,5vw,56px);}
+.rating-big{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,6vw,5rem);font-weight:800;color:var(--cream);line-height:1;display:flex;align-items:center;justify-content:center;gap:12px;margin:14px 0 8px;flex-wrap:wrap;}
+.rating-stars{color:var(--gold);font-size:clamp(1.2rem,3vw,2rem);letter-spacing:3px;}
+.rating-count{font-size:clamp(.78rem,1.3vw,.85rem);color:var(--muted);}
+.reviews-scroller{display:flex;gap:16px;animation:rscroll 24s linear infinite;width:max-content;}
+@keyframes rscroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.rev-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:clamp(18px,2.5vw,28px);width:clamp(240px,36vw,300px);flex-shrink:0;}
+.rev-stars{color:var(--gold);font-size:.9rem;letter-spacing:2px;margin-bottom:10px;}
+.rev-text{font-size:clamp(.78rem,1.3vw,.88rem);line-height:1.7;color:rgba(251,245,232,.75);font-style:italic;margin-bottom:16px;}
+.rev-author{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.rev-verified{display:inline-flex;align-items:center;gap:4px;font-size:.63rem;color:var(--green);margin-top:5px;}
+
+/* ── MENU ── */
+.menu-section{padding:var(--section-py) var(--px);background:var(--dark);}
+.menu-header{text-align:center;margin-bottom:clamp(36px,5vw,56px);}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1100px;margin:0 auto;}
+.m-card{background:var(--dark2);padding:clamp(18px,2.5vw,28px);position:relative;overflow:hidden;transition:transform .3s;cursor:pointer;}
+.m-card:hover{z-index:2;transform:scale(1.02);}
+.m-card::before{content:'';position:absolute;inset:0;background:var(--red);opacity:0;transition:opacity .3s;}
+.m-card>*{position:relative;z-index:1;}
+.m-emoji{font-size:clamp(1.8rem,3vw,2.2rem);margin-bottom:12px;}
+.m-name{font-family:'Syne',sans-serif;font-size:clamp(.95rem,1.7vw,1.1rem);font-weight:800;color:var(--cream);margin-bottom:6px;transition:color .3s;}
+.m-desc{font-size:clamp(.72rem,1.2vw,.8rem);line-height:1.6;color:var(--muted);margin-bottom:12px;transition:color .3s;}
+.m-footer{display:flex;align-items:center;justify-content:space-between;}
+.m-price{font-family:'Syne',sans-serif;font-size:clamp(1.1rem,2.2vw,1.4rem);font-weight:800;color:var(--gold);transition:color .3s;}
+.m-tag{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;background:rgba(232,25,12,.15);color:var(--red);border-radius:4px;transition:all .3s;white-space:nowrap;}
+.m-card:hover .m-name,.m-card:hover .m-desc{color:#fff;}
+.m-card:hover .m-price,.m-card:hover .m-tag{color:#fff;background:rgba(255,255,255,.2);}
+.menu-cta{text-align:center;margin-top:clamp(28px,4vw,40px);}
+
+/* ── VISIT ── */
+.visit-section{background:linear-gradient(180deg,#0F0A06 0%,#1a0d06 100%);padding:var(--section-py) var(--px);}
+.visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,6vw,64px);align-items:start;max-width:1100px;margin:0 auto;}
+h3{font-family:'Syne',sans-serif;font-size:clamp(1.3rem,2.8vw,1.6rem);font-weight:800;color:var(--cream);margin-bottom:24px;}
+.info-row{display:flex;align-items:flex-start;gap:12px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.info-row:last-of-type{border-bottom:none;}
+.i-icon{font-size:1rem;margin-top:2px;flex-shrink:0;}
+.i-label{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+.i-val{font-size:clamp(.85rem,1.5vw,.95rem);color:var(--cream);}
+.i-val a{color:var(--gold);text-decoration:none;}
+.i-val a:hover{text-decoration:underline;}
+.open-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#22C55E;padding:4px 10px;border-radius:20px;font-size:.68rem;letter-spacing:.06em;font-weight:600;margin-left:10px;white-space:nowrap;}
+.open-dot{width:7px;height:7px;background:#22C55E;border-radius:50%;animation:pulse 1.5s infinite;flex-shrink:0;}
+.map-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;position:relative;overflow:hidden;padding:24px;}
+.map-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(232,25,12,.08) 0%,transparent 70%);}
+.map-pin-big{font-size:clamp(2.5rem,5vw,4rem);}
+.map-name{font-family:'Syne',sans-serif;font-size:clamp(.95rem,1.8vw,1.1rem);font-weight:800;color:var(--cream);}
+.map-addr{font-size:clamp(.76rem,1.3vw,.82rem);color:var(--muted);text-align:center;line-height:1.5;}
+
+/* ── FINAL CTA ── */
+.final-cta{background:var(--red);padding:var(--section-py) var(--px);text-align:center;position:relative;overflow:hidden;}
+.final-cta::before{content:'🍕';position:absolute;font-size:clamp(8rem,20vw,20rem);opacity:.04;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.final-cta h2{color:#fff;font-size:clamp(1.8rem,4.5vw,3.2rem);margin-bottom:14px;}
+.final-cta p{color:rgba(255,255,255,.8);font-size:clamp(.88rem,1.5vw,1rem);margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto;}
+.final-cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-white{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--red);padding:clamp(14px,2.5vw,18px) clamp(22px,4vw,36px);border-radius:8px;font-size:clamp(.88rem,1.5vw,1rem);font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s;white-space:nowrap;}
+.btn-white:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.25);}
+.btn-outline-white{display:inline-flex;align-items:center;gap:10px;background:transparent;color:#fff;padding:clamp(13px,2.4vw,17px) clamp(18px,3vw,32px);border-radius:8px;font-size:clamp(.84rem,1.4vw,.95rem);font-weight:600;text-decoration:none;border:2px solid rgba(255,255,255,.5);transition:border-color .2s,background .2s,transform .2s;white-space:nowrap;}
+.btn-outline-white:hover{border-color:#fff;background:rgba(255,255,255,.1);transform:translateY(-3px);}
+
+/* ── WHATSAPP FLOAT ── */
+.wa-float{position:fixed;bottom:28px;right:22px;z-index:180;width:clamp(52px,8vw,60px);height:clamp(52px,8vw,60px);background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(1.3rem,2.5vw,1.6rem);box-shadow:0 4px 20px rgba(37,211,102,.5);text-decoration:none;animation:wa-b 3s ease-in-out infinite;transition:transform .2s;}
+.wa-float:hover{transform:scale(1.1);}
+@keyframes wa-b{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+.wa-tooltip{position:absolute;right:calc(100% + 12px);top:50%;transform:translateY(-50%);background:var(--dark);color:var(--cream);padding:7px 12px;border-radius:6px;font-size:.75rem;font-weight:600;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;}
+.wa-float:hover .wa-tooltip{opacity:1;}
+.wa-tooltip::after{content:'';position:absolute;left:100%;top:50%;transform:translateY(-50%);border:6px solid transparent;border-left-color:var(--dark);}
+
+/* ── FOOTER ── */
+footer{background:#080503;padding:clamp(24px,4vw,40px) var(--px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:1px solid rgba(255,255,255,.05);}
+.footer-logo{font-family:'Syne',sans-serif;font-size:clamp(1.1rem,2vw,1.4rem);font-weight:800;color:var(--cream);}
+.footer-logo span{color:var(--red);}
+.footer-links{display:flex;gap:clamp(14px,2.5vw,24px);flex-wrap:wrap;}
+.footer-links a{color:var(--muted);font-size:.76rem;text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--cream);}
+.footer-note{font-size:.7rem;color:var(--muted);}
+
+/* ── ANIMATIONS ── */
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+
+/* ════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ════════════════════════════════════════ */
+
+/* ── Tablet wide (≤1100px) ── */
+@media(max-width:1100px){
+  .deals-grid{grid-template-columns:repeat(2,1fr);}
+  .deal-card.featured{grid-column:span 2;}
+  .menu-grid{grid-template-columns:repeat(2,1fr);}
+}
+
+/* ── Tablet (≤860px) ── */
+@media(max-width:860px){
+  nav .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .mobile-menu{display:flex;}
+
+  .hero{
+    padding:clamp(70px,10vw,100px) var(--px) clamp(90px,12vw,110px);
+    align-items:flex-start;padding-top:clamp(80px,12vw,110px);
+  }
+  .hero-pizza-wrap{
+    opacity:.25;
+    width:clamp(180px,55vw,380px);height:clamp(180px,55vw,380px);
+    right:clamp(-60px,-8vw,-20px);
+  }
+
+  .numbers-section{grid-template-columns:repeat(2,1fr);}
+  .number-block{border-right:none;border-bottom:1px solid rgba(15,10,6,.1);}
+  .number-block:nth-child(odd){border-right:1px solid rgba(15,10,6,.1);}
+  .number-block:nth-last-child(-n+2){border-bottom:none;}
+
+  .steps-row{grid-template-columns:repeat(2,1fr);gap:32px 20px;}
+  .steps-row::before{display:none;}
+
+  .visit-grid{grid-template-columns:1fr;}
+  .map-box{min-height:240px;}
+}
+
+/* ── Mobile (≤600px) ── */
+@media(max-width:600px){
+  .sticky-order{display:block;}
+  .wa-float{bottom:82px;}
+
+  .urgency-bar{font-size:.68rem;padding:9px 12px;gap:7px;}
+  .urgency-bar .hide-mobile{display:none;}
+
+  .social-proof-bar .proof-divider:last-of-type,
+  .social-proof-bar span:last-child{display:none;}
+
+  h1{font-size:clamp(2.2rem,9vw,3rem);line-height:1;}
+
+  .cta-group{flex-direction:column;align-items:stretch;}
+  .btn-fire,.btn-ghost{justify-content:center;width:100%;}
+
+  .trust-strip{gap:14px;}
+  .trust-item:last-child{display:none;}
+
+  .deals-grid{grid-template-columns:1fr;}
+  .deal-card.featured{grid-column:span 1;}
+
+  .steps-row{grid-template-columns:1fr;}
+  .step{display:grid;grid-template-columns:auto 1fr;align-items:start;gap:16px;text-align:left;}
+  .step-num{margin:0;width:52px;height:52px;font-size:1.2rem;flex-shrink:0;}
+  .step-content{padding-top:6px;}
+
+  .menu-grid{grid-template-columns:1fr;}
+  .m-card:hover{transform:none;}
+
+  .rating-big{font-size:clamp(2rem,8vw,3rem);}
+  .rating-big span{font-size:1.2rem!important;}
+
+  .final-cta-btns{flex-direction:column;align-items:stretch;}
+  .btn-white,.btn-outline-white{justify-content:center;}
+
+  footer{flex-direction:column;align-items:center;text-align:center;gap:12px;}
+  .footer-links{justify-content:center;}
+
+  .wa-tooltip{display:none;}
+}
+
+/* ── Small mobile (≤380px) ── */
+@media(max-width:380px){
+  h1{font-size:2rem;}
+  .hero-pizza-wrap{display:none;}
+  .urgency-bar a{font-size:.66rem;}
+  .num-big{font-size:1.8rem;}
+}
+
+/* ── Wide / 4K (≥1600px) ── */
+@media(min-width:1600px){
+  :root{--px:80px;}
+  .deals-grid,.menu-grid{max-width:1300px;}
+  .visit-grid{max-width:1300px;}
+  .offer-header{max-width:800px;}
+}
+</style>
+</head>
+<body>
+
+<!-- URGENCY BAR -->
+<div class="urgency-bar">
+  <span class="pulse-dot"></span>
+  🔥 We're OPEN RIGHT NOW — <a href="tel:+26656560456">call +266 5656 0456</a> and your pizza will be ready in minutes!
+</div>
+
+<!-- STICKY MOBILE CTA -->
+<div class="sticky-order">
+  <a href="tel:+26656560456">📞 Tap to Order — +266 5656 0456</a>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a class="wa-float" href="https://wa.me/26656560456?text=Hi!%20I'd%20like%20to%20order%20a%20pizza%20%F0%9F%8D%95" target="_blank" rel="noopener">
+  💬
+  <span class="wa-tooltip">Order on WhatsApp</span>
+</a>
+
+<!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#deals" onclick="closeMM()">Deals</a>
+  <a href="#menu" onclick="closeMM()">Menu</a>
+  <a href="#reviews" onclick="closeMM()">Reviews</a>
+  <a href="#visit" onclick="closeMM()">Find Us</a>
+  <a href="tel:+26656560456" class="mm-order" onclick="closeMM()">📞 Order Now</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Pizza <span>Express</span> LS</div>
+  <ul class="nav-links">
+    <li><a href="#deals">Deals</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#visit">Find Us</a></li>
+    <li><a href="tel:+26656560456" class="nav-order">📞 Order Now</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="fire1"></div><div class="fire2"></div><div class="fire3"></div>
+
+  <div class="hero-pizza-wrap" aria-hidden="true">
+    <svg class="pizza-ring" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="250" cy="250" r="240" fill="#7a3810" opacity=".95"/>
+      <circle cx="250" cy="250" r="218" fill="#C2611A"/>
+      <circle cx="250" cy="250" r="198" fill="#CC1A0A" opacity=".9"/>
+      <ellipse cx="210" cy="200" rx="70" ry="62" fill="#F5DEB3" opacity=".88"/>
+      <ellipse cx="300" cy="240" rx="62" ry="68" fill="#F5DEB3" opacity=".83"/>
+      <ellipse cx="230" cy="308" rx="66" ry="54" fill="#F5DEB3" opacity=".86"/>
+      <ellipse cx="168" cy="280" rx="44" ry="48" fill="#F5DEB3" opacity=".78"/>
+      <circle cx="202" cy="188" r="26" fill="#7A0012"/><circle cx="202" cy="188" r="21" fill="#9E0018"/>
+      <circle cx="305" cy="218" r="28" fill="#7A0012"/><circle cx="305" cy="218" r="23" fill="#9E0018"/>
+      <circle cx="242" cy="305" r="24" fill="#7A0012"/><circle cx="242" cy="305" r="19" fill="#9E0018"/>
+      <circle cx="172" cy="268" r="22" fill="#7A0012"/><circle cx="172" cy="268" r="17" fill="#9E0018"/>
+      <circle cx="330" cy="300" r="25" fill="#7A0012"/><circle cx="330" cy="300" r="20" fill="#9E0018"/>
+      <ellipse cx="265" cy="232" rx="14" ry="8" fill="#3d6b34" transform="rotate(-20 265 232)" opacity=".92"/>
+      <ellipse cx="210" cy="342" rx="12" ry="7" fill="#3d6b34" transform="rotate(12 210 342)" opacity=".9"/>
+      <ellipse cx="275" cy="170" rx="12" ry="7" fill="#3d6b34" transform="rotate(-38 275 170)" opacity=".9"/>
+      <circle cx="250" cy="250" r="237" fill="none" stroke="rgba(255,200,100,.12)" stroke-width="5"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="social-proof-bar">
+      <span class="stars-sm">★★★★★</span>
+      <span class="proof-divider"></span>
+      <span><strong>84%</strong> recommend us</span>
+      <span class="proof-divider"></span>
+      <span>Maseru's Favourite Pizza</span>
+    </div>
+
+    <h1>
+      Maseru's <span class="accent">Hottest</span>
+      <span class="ug">Pizza</span> Place
+    </h1>
+    <p class="hero-sub">
+      Fresh-made, <strong>always open</strong>, always delicious.<br>
+      Family &amp; friends gathering for great food in Khubetsoana.
+    </p>
+
+    <div class="cta-group">
+      <a href="tel:+26656560456" class="btn-fire">📞 Call to Order Now</a>
+      <a href="#deals" class="btn-ghost">🔥 See Today's Deals</a>
+    </div>
+
+    <div class="urgency-nudge">
+      ⚡ We're open right now — order takes just 2 minutes
+    </div>
+
+    <div class="trust-strip">
+      <div class="trust-item">
+        <div class="trust-icon">⏰</div>
+        <div class="trust-text"><strong>Always Open</strong><span>24/7, no exceptions</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🚗</div>
+        <div class="trust-text"><strong>Curbside Pickup</strong><span>Fast &amp; convenient</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">💰</div>
+        <div class="trust-text"><strong>Budget Friendly</strong><span>From just M 85</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">Discover</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    <span>ALWAYS OPEN</span><span class="marquee-dot">·</span>
+    <span>CURBSIDE PICKUP</span><span class="marquee-dot">·</span>
+    <span>HOT &amp; FRESH</span><span class="marquee-dot">·</span>
+    <span>MASERU'S FAVOURITE</span><span class="marquee-dot">·</span>
+    <span>84% RECOMMEND</span><span class="marquee-dot">·</span>
+    <span>ORDER NOW</span><span class="marquee-dot">·</span>
+    <span>ALWAYS OPEN</span><span class="marquee-dot">·</span>
+    <span>CURBSIDE PICKUP</span><span class="marquee-dot">·</span>
+    <span>HOT &amp; FRESH</span><span class="marquee-dot">·</span>
+    <span>MASERU'S FAVOURITE</span><span class="marquee-dot">·</span>
+    <span>84% RECOMMEND</span><span class="marquee-dot">·</span>
+    <span>ORDER NOW</span><span class="marquee-dot">·</span>
+  </div>
+</div>
+
+<!-- SOCIAL PROOF NUMBERS -->
+<div class="numbers-section">
+  <div class="number-block fade-up"><div class="num-big" data-target="84" data-suffix="%">0%</div><div class="num-label">Recommend Us</div></div>
+  <div class="number-block fade-up" style="transition-delay:.1s"><div class="num-big">5★</div><div class="num-label">Average Rating</div></div>
+  <div class="number-block fade-up" style="transition-delay:.2s"><div class="num-big">24/7</div><div class="num-label">Always Open</div></div>
+  <div class="number-block fade-up" style="transition-delay:.3s"><div class="num-big">M85</div><div class="num-label">Starting Price</div></div>
+</div>
+
+<!-- DEALS -->
+<section class="offer-section" id="deals">
+  <div class="offer-header fade-up">
+    <div class="section-chip gold">🔥 Today's Best Deals</div>
+    <h2>Unbeatable <em>Value</em> for the Whole Family</h2>
+    <p class="section-sub">Order now — best prices in Maseru, always.</p>
+  </div>
+  <div class="deals-grid">
+    <div class="deal-card fade-up">
+      <div class="deal-emoji">🍕</div>
+      <div class="deal-name">Margherita Classica</div>
+      <div class="deal-desc">San Marzano tomato sauce, fresh mozzarella, fragrant basil. A timeless classic.</div>
+      <div class="scarcity">🔥 Most ordered today</div>
+      <div class="deal-price-row"><div class="deal-price">M 85</div></div>
+      <a href="tel:+26656560456" class="deal-cta">Order Now →</a>
+    </div>
+    <div class="deal-card featured fade-up" style="transition-delay:.1s">
+      <div class="deal-badge gold">⭐ Best Value</div>
+      <div class="deal-emoji">👨‍👩‍👧‍👦</div>
+      <div class="deal-name">Family Feast Deal</div>
+      <div class="deal-desc">2 large pizzas + garlic bread + 2L drink. The perfect spread for the whole crew!</div>
+      <div class="scarcity">👥 Popular with families today</div>
+      <div class="deal-price-row"><div class="deal-price">M 290</div><div class="deal-old">M 360</div></div>
+      <a href="tel:+26656560456" class="deal-cta">Claim This Deal →</a>
+    </div>
+    <div class="deal-card fade-up" style="transition-delay:.2s">
+      <div class="deal-badge">🌶 Spicy</div>
+      <div class="deal-emoji">🔥</div>
+      <div class="deal-name">Pepperoni Inferno</div>
+      <div class="deal-desc">Double pepperoni, nduja, chilli honey drizzle, smoked mozzarella. For the bold.</div>
+      <div class="scarcity">⚡ Limited portions nightly</div>
+      <div class="deal-price-row"><div class="deal-price">M 105</div></div>
+      <a href="tel:+26656560456" class="deal-cta">Order Now →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="order">
+  <div class="offer-header fade-up">
+    <div class="section-chip" style="background:rgba(232,25,12,.1);color:var(--red);">4 Simple Steps</div>
+    <h2 style="color:var(--dark);">Getting Your Pizza is <em>Easy</em></h2>
+  </div>
+  <div class="steps-row">
+    <div class="step fade-up"><div class="step-num">1</div><div class="step-content"><div class="step-title">Call or WhatsApp</div><div class="step-text">Ring +266 5656 0456 or drop a WhatsApp in seconds.</div></div></div>
+    <div class="step fade-up" style="transition-delay:.1s"><div class="step-num">2</div><div class="step-content"><div class="step-title">Choose Your Pizza</div><div class="step-text">Tell us what you want — we'll guide you to the best option.</div></div></div>
+    <div class="step fade-up" style="transition-delay:.2s"><div class="step-num">3</div><div class="step-content"><div class="step-title">We Make It Fresh</div><div class="step-text">Your pizza is made hot and fresh right after you order.</div></div></div>
+    <div class="step fade-up" style="transition-delay:.3s"><div class="step-num">4</div><div class="step-content"><div class="step-title">Curbside Pickup</div><div class="step-text">Drive up to Khubetsoana — we bring it straight to your car.</div></div></div>
+  </div>
+  <div class="how-cta fade-up">
+    <a href="tel:+26656560456" class="btn-fire">📞 Start My Order Now</a>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section" id="reviews">
+  <div class="reviews-header fade-up">
+    <div class="section-chip" style="display:inline-block;">Verified Reviews</div>
+    <div class="rating-big">84% <span style="font-size:2.4rem;color:var(--muted);font-weight:300;">recommend</span></div>
+    <div class="rating-stars">★★★★★</div>
+    <div class="rating-count">Based on 5 reviews · <span style="color:var(--green);">✓ All verified customers</span></div>
+  </div>
+  <div style="overflow:hidden;">
+    <div class="reviews-scroller">
+      <div class="rev-card"><div class="rev-stars">★★★★★</div><p class="rev-text">"Best pizza in Maseru. The pepperoni is stacked and the crust is perfect every time. We come every single weekend!"</p><div class="rev-author">Thabo M., Maseru</div><div class="rev-verified">✓ Verified customer</div></div>
+      <div class="rev-card"><div class="rev-stars">★★★★★</div><p class="rev-text">"Always fresh, always hot. Curbside pickup is so convenient — in and out in under 5 minutes. Will absolutely be back."</p><div class="rev-author">Palesa K., Khubetsoana</div><div class="rev-verified">✓ Verified customer</div></div>
+      <div class="rev-card"><div class="rev-stars">★★★★☆</div><p class="rev-text">"The Family Feast Deal is incredible value. Fed all 4 of us with change to spare. Kids absolutely love it!"</p><div class="rev-author">Neo L., Maseru</div><div class="rev-verified">✓ Verified customer</div></div>
+      <div class="rev-card"><div class="rev-stars">★★★★★</div><p class="rev-text">"Open late, great prices, and the staff are so friendly. The BBQ Chicken pizza is my go-to every single time."</p><div class="rev-author">Lerato S., Maseru</div><div class="rev-verified">✓ Verified customer</div></div>
+      <div class="rev-card"><div class="rev-stars">★★★★★</div><p class="rev-text">"Stumbled in on a Friday night and it was the best decision I made all week. The Margherita is simply perfect."</p><div class="rev-author">David O., Visiting</div><div class="rev-verified">✓ Verified customer</div></div>
+      <div class="rev-card"><div class="rev-stars">★★★★★</div><p class="rev-text">"Best pizza in Maseru. The pepperoni is stacked and the crust is perfect every time. We come every single weekend!"</p><div class="rev-author">Thabo M., Maseru</div><div class="rev-verified">✓ Verified customer</div></div>
+      <div class="rev-card"><div class="rev-stars">★★★★★</div><p class="rev-text">"Always fresh, always hot. Curbside pickup is so convenient — in and out in under 5 minutes. Will absolutely be back."</p><div class="rev-author">Palesa K., Khubetsoana</div><div class="rev-verified">✓ Verified customer</div></div>
+      <div class="rev-card"><div class="rev-stars">★★★★☆</div><p class="rev-text">"The Family Feast Deal is incredible value. Fed all 4 of us with change to spare. Kids absolutely love it!"</p><div class="rev-author">Neo L., Maseru</div><div class="rev-verified">✓ Verified customer</div></div>
+      <div class="rev-card"><div class="rev-stars">★★★★★</div><p class="rev-text">"Open late, great prices, and the staff are so friendly. The BBQ Chicken pizza is my go-to every single time."</p><div class="rev-author">Lerato S., Maseru</div><div class="rev-verified">✓ Verified customer</div></div>
+      <div class="rev-card"><div class="rev-stars">★★★★★</div><p class="rev-text">"Stumbled in on a Friday night and it was the best decision I made all week. The Margherita is simply perfect."</p><div class="rev-author">David O., Visiting</div><div class="rev-verified">✓ Verified customer</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <div class="menu-header fade-up">
+    <div class="section-chip">Full Menu</div>
+    <h2>Something for <em>Everyone</em></h2>
+  </div>
+  <div class="menu-grid">
+    <div class="m-card fade-up"><div class="m-emoji">🍕</div><div class="m-name">Margherita Classica</div><div class="m-desc">San Marzano tomato, fresh mozzarella, basil</div><div class="m-footer"><div class="m-price">M 85</div><div class="m-tag">Bestseller</div></div></div>
+    <div class="m-card fade-up" style="transition-delay:.08s"><div class="m-emoji">🔥</div><div class="m-name">Pepperoni Inferno</div><div class="m-desc">Double pepperoni, nduja, chilli honey, smoked mozz</div><div class="m-footer"><div class="m-price">M 105</div><div class="m-tag">Spicy</div></div></div>
+    <div class="m-card fade-up" style="transition-delay:.16s"><div class="m-emoji">🌿</div><div class="m-name">Garden Verde</div><div class="m-desc">Roasted peppers, mushrooms, spinach, goat's cheese</div><div class="m-footer"><div class="m-price">M 95</div><div class="m-tag">Veggie</div></div></div>
+    <div class="m-card fade-up" style="transition-delay:.24s"><div class="m-emoji">🍗</div><div class="m-name">BBQ Chicken Ranch</div><div class="m-desc">Smoky BBQ base, grilled chicken, sweetcorn, ranch</div><div class="m-footer"><div class="m-price">M 110</div><div class="m-tag">Popular</div></div></div>
+    <div class="m-card fade-up" style="transition-delay:.32s"><div class="m-emoji">🧄</div><div class="m-name">Garlic &amp; Herb Bread</div><div class="m-desc">Fresh dough, roasted garlic butter, herbs, dip</div><div class="m-footer"><div class="m-price">M 38</div><div class="m-tag">Starter</div></div></div>
+    <div class="m-card fade-up" style="transition-delay:.4s"><div class="m-emoji">👨‍👩‍👧‍👦</div><div class="m-name">Family Feast Deal</div><div class="m-desc">2 large pizzas + garlic bread + 2L drink</div><div class="m-footer"><div class="m-price">M 290</div><div class="m-tag">Best Value</div></div></div>
+  </div>
+  <div class="menu-cta fade-up">
+    <a href="tel:+26656560456" class="btn-fire">📞 Order From This Menu</a>
+  </div>
+</section>
+
+<!-- VISIT -->
+<section class="visit-section" id="visit">
+  <div class="visit-grid">
+    <div class="fade-up">
+      <div class="section-chip" style="margin-bottom:20px;">Find Us</div>
+      <h3>Come Visit Us <span style="color:var(--red)">in Maseru</span></h3>
+      <div class="info-row"><div class="i-icon">📍</div><div><div class="i-label">Address</div><div class="i-val">Khubetsoana, Maseru, Lesotho</div></div></div>
+      <div class="info-row"><div class="i-icon">📞</div><div><div class="i-label">Phone</div><div class="i-val"><a href="tel:+26656560456">+266 5656 0456</a></div></div></div>
+      <div class="info-row"><div class="i-icon">🌐</div><div><div class="i-label">Website</div><div class="i-val"><a href="https://pizzaexpressls.com" target="_blank">pizzaexpressls.com</a></div></div></div>
+      <div class="info-row"><div class="i-icon">⏰</div><div><div class="i-label">Hours</div><div class="i-val" style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">Always Open <span class="open-pill"><span class="open-dot"></span>Open Now</span></div></div></div>
+      <div class="info-row"><div class="i-icon">🚗</div><div><div class="i-label">Pickup</div><div class="i-val">Curbside Pickup Available</div></div></div>
+      <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;">
+        <a href="tel:+26656560456" class="btn-fire" style="padding:14px 28px;font-size:.9rem;">📞 Call Now</a>
+        <a href="https://wa.me/26656560456?text=Hi!%20I'd%20like%20to%20order%20a%20pizza%20%F0%9F%8D%95" target="_blank" class="btn-ghost" style="padding:13px 28px;font-size:.9rem;">💬 WhatsApp</a>
+        <a href="https://maps.google.com/?q=Pizza+Express+LS+Maseru+Lesotho" target="_blank" class="btn-ghost" style="padding:13px 24px;font-size:.9rem;">🗺 Directions</a>
+      </div>
+    </div>
+    <div class="map-box fade-up" style="transition-delay:.15s;">
+      <div class="map-pin-big">📍</div>
+      <div class="map-name">Pizza Express LS</div>
+      <div class="map-addr">Khubetsoana<br>Maseru, Lesotho</div>
+      <a href="https://maps.google.com/?q=Pizza+Express+LS+Maseru+Lesotho" target="_blank" class="btn-ghost" style="position:relative;z-index:1;font-size:.8rem;padding:10px 22px;">Open in Google Maps ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<div class="final-cta">
+  <h2>Hungry? Let's Fix That Right Now.</h2>
+  <p>Pick up the phone, place your order in 2 minutes, and enjoy the best pizza in Maseru. We're open and ready.</p>
+  <div class="final-cta-btns">
+    <a href="tel:+26656560456" class="btn-white">📞 Call +266 5656 0456</a>
+    <a href="https://wa.me/26656560456?text=Hi!%20I'd%20like%20to%20order%20%F0%9F%8D%95" target="_blank" class="btn-outline-white">💬 Order on WhatsApp</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Pizza <span>Express</span> LS</div>
+  <div class="footer-links">
+    <a href="tel:+26656560456">📞 5656 0456</a>
+    <a href="https://pizzaexpressls.com" target="_blank">Website</a>
+    <a href="https://maps.google.com/?q=Pizza+Express+LS+Maseru+Lesotho" target="_blank">Directions</a>
+  </div>
+  <div class="footer-note">© 2024 Pizza Express LS · Khubetsoana, Maseru · Always Open</div>
+</footer>
+
+<script>
+// ── Hamburger menu ──
+const hb = document.getElementById('hamburger');
+const mm = document.getElementById('mobileMenu');
+function closeMM(){hb.classList.remove('open');mm.classList.remove('open');document.body.style.overflow='';}
+hb.addEventListener('click',()=>{
+  const isOpen = mm.classList.toggle('open');
+  hb.classList.toggle('open',isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMM();});
+
+// ── Scroll-reveal ──
+const obs = new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+// ── Counter animation ──
+function animCount(el){
+  const target=parseInt(el.dataset.target);
+  const suffix=el.dataset.suffix||'';
+  let start=null;const dur=1600;
+  const step=ts=>{if(!start)start=ts;const p=Math.min((ts-start)/dur,1);const e=1-Math.pow(1-p,3);el.textContent=Math.floor(e*target)+suffix;if(p<1)requestAnimationFrame(step);};
+  requestAnimationFrame(step);
+}
+const numObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('[data-target]').forEach(el=>animCount(el));numObs.disconnect();}});},{threshold:0.3});
+const ns=document.querySelector('.numbers-section');if(ns)numObs.observe(ns);
+
+// ── Dynamic nav top offset ──
+function fixNav(){
+  const bar=document.querySelector('.urgency-bar');
+  const nav=document.querySelector('nav');
+  if(bar&&nav)nav.style.top=bar.offsetHeight+'px';
+}
+fixNav();
+window.addEventListener('resize',fixNav);
+</script>
+</body>
+</html>
