@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact – Jay's Restaurant</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;600;700;900&family=Lora:ital,wght@1,600&display=swap" rel="stylesheet">
+<style>
+  :root{--red:#D62828;--red-deep:#A01E1E;--amber:#F4A118;--amber-lt:#FFBE42;--black:#0B0B0B;--black2:#141414;--black3:#1C1C1C;--white:#FAF6EE;--muted:#777;--border:rgba(244,161,24,.15)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Montserrat',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden}
+  nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:1rem 5rem;display:flex;justify-content:space-between;align-items:center;background:rgba(11,11,11,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+  .logo{font-family:'Anton',sans-serif;letter-spacing:3px;font-size:1.7rem;color:var(--white);text-decoration:none}
+  .logo .r{color:var(--red)}.logo .a{color:var(--amber)}
+  .nav-links{display:flex;gap:2rem;list-style:none}
+  .nav-links a{text-decoration:none;color:rgba(250,246,238,.6);font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;transition:color .2s}
+  .nav-links a:hover,.nav-links a.active{color:var(--amber)}
+  .nav-order{background:var(--red);color:var(--white);padding:.55rem 1.4rem;border-radius:3px;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:2px solid var(--red);transition:all .2s}
+  .nav-order:hover{background:var(--red-deep)}
+  .ham{display:none;flex-direction:column;gap:5px;cursor:pointer}
+  .ham span{width:24px;height:2px;background:var(--white);display:block}
+  .mob-menu{position:fixed;inset:0;background:var(--black);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;transform:translateX(100%);transition:transform .4s;border-left:3px solid var(--red)}
+  .mob-menu.open{transform:translateX(0)}
+  .mob-menu a{font-family:'Anton',sans-serif;font-size:2.5rem;letter-spacing:3px;color:var(--white);text-decoration:none}
+
+  /* HERO with warm restaurant photo */
+  .page-hdr{min-height:400px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding-top:62px}
+  .hdr-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1800&q=80');background-size:cover;background-position:center;filter:brightness(.22) saturate(.9)}
+  .hdr-ov{position:absolute;inset:0;background:linear-gradient(to top,var(--black) 0%,rgba(11,11,11,.4) 65%,transparent 100%)}
+  .hdr-content{position:relative;z-index:2;padding:4rem 5rem 3rem}
+  .eyebrow{font-size:.62rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--amber);margin-bottom:.7rem;display:flex;align-items:center;gap:.8rem}
+  .eyebrow::before{content:'';width:28px;height:2px;background:var(--red)}
+  h1{font-family:'Anton',sans-serif;font-size:clamp(3rem,7vw,6rem);line-height:.92;letter-spacing:2px;margin-bottom:.8rem}
+  h1 .r{color:var(--red)}h1 .a{color:var(--amber)}
+  .sub{color:rgba(250,246,238,.65);font-size:.9rem;line-height:1.7;max-width:460px}
+
+  /* CONTACT CARDS */
+  .cc-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;padding:3.5rem 5rem 0}
+  .cc{background:var(--black2);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:2rem;transition:all .3s;position:relative;overflow:hidden}
+  .cc::before{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--red);transition:width .4s}
+  .cc:hover::before{width:100%}
+  .cc:hover{border-color:rgba(214,40,40,.35);transform:translateY(-4px);box-shadow:0 16px 50px rgba(0,0,0,.5)}
+  .cc-icon{font-size:2rem;margin-bottom:1rem}
+  .cc-label{font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--amber);margin-bottom:.5rem;font-weight:700}
+  .cc-val{font-size:.95rem;color:var(--white);line-height:1.7}
+  .cc-val a{color:var(--white);text-decoration:none;transition:color .2s}
+  .cc-val a:hover{color:var(--amber)}
+  .cc-note{font-size:.7rem;color:var(--muted);margin-top:.3rem}
+
+  /* SPLIT */
+  .split{display:grid;grid-template-columns:1fr 1fr;margin-top:4rem}
+
+  /* MAP side with photo */
+  .map-side{position:relative;min-height:500px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+  .map-img{position:absolute;inset:0}
+  .map-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.35) saturate(.8)}
+  .map-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(11,11,11,.95) 0%,rgba(11,11,11,.4) 60%,transparent 100%)}
+  .map-content{position:relative;z-index:2;padding:3rem 4rem}
+  .map-content h2{font-family:'Anton',sans-serif;font-size:2.5rem;letter-spacing:2px;color:var(--white);margin-bottom:.5rem}
+  .map-addr{font-family:'Lora',sans-serif;font-style:italic;font-size:1.1rem;color:var(--amber-lt);margin-bottom:1rem}
+  .map-content p{color:var(--muted);font-size:.85rem;line-height:1.7;margin-bottom:1.5rem}
+  .btn-map{background:var(--red);color:var(--white);padding:.85rem 2rem;border-radius:3px;font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;display:inline-block;transition:all .25s;border:2px solid var(--red)}
+  .btn-map:hover{background:var(--red-deep);transform:translateY(-2px)}
+  .hours-wrap{margin-top:2rem;display:grid;grid-template-columns:auto 1fr;gap:.45rem 1.5rem;font-size:.8rem}
+  .hday{color:var(--muted)}.htime{color:var(--white);font-weight:600}
+
+  .form-side{padding:5rem;background:var(--black2)}
+  .div-bar{width:40px;height:3px;background:var(--red);margin-bottom:2rem}
+  h2.sh{font-family:'Anton',sans-serif;font-size:2rem;letter-spacing:1px;margin-bottom:.5rem}
+  p.sp{color:var(--muted);font-size:.84rem;line-height:1.7;margin-bottom:2rem}
+  .fg{margin-bottom:1.4rem}
+  label{display:block;font-size:.6rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--amber);margin-bottom:.5rem;font-weight:700}
+  input,select,textarea{width:100%;background:var(--black3);border:1px solid rgba(255,255,255,.1);color:var(--white);padding:.9rem 1rem;border-radius:3px;font-family:'Montserrat',sans-serif;font-size:.88rem;transition:border-color .2s}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--amber)}
+  select option{background:var(--black3)}
+  textarea{resize:vertical;min-height:120px}
+  .btn-submit{width:100%;background:var(--red);color:var(--white);border:2px solid var(--red);padding:1.1rem;font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;border-radius:3px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+  .btn-submit::before{content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transition:left .4s}
+  .btn-submit:hover::before{left:100%}.btn-submit:hover{background:var(--red-deep)}
+  .success{display:none;background:rgba(244,161,24,.08);border:1px solid rgba(244,161,24,.3);padding:1.5rem;border-radius:4px;text-align:center;margin-top:1rem}
+  .success h3{font-family:'Anton',sans-serif;font-size:1.5rem;color:var(--amber);margin-bottom:.4rem}
+  .success p{font-size:.83rem;color:var(--muted)}.success a{color:var(--amber);text-decoration:none}
+
+  footer{background:#070707;border-top:1px solid rgba(255,255,255,.05);padding:2rem 5rem;display:flex;justify-content:space-between;align-items:center;font-size:.72rem;color:var(--muted)}
+  footer a{color:var(--amber);text-decoration:none}
+
+  @media(max-width:1024px){.split{grid-template-columns:1fr}.map-side{min-height:400px}}
+  @media(max-width:768px){
+    nav{padding:1rem 1.5rem}.nav-links,.nav-order{display:none}.ham{display:flex}
+    .hdr-content{padding:4rem 1.5rem 2.5rem}.cc-row{padding:2.5rem 1.5rem 0}
+    .map-content{padding:2rem 1.5rem}.form-side{padding:3rem 1.5rem}
+    footer{flex-direction:column;gap:.5rem;padding:2rem 1.5rem;text-align:center}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">JAY'S<span class="r">.</span><span class="a">RESTAURANT</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li><li><a href="menu.html">Menu</a></li>
+    <li><a href="reservations.html">Reserve</a></li><li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+  <a href="menu.html" class="nav-order">Order Now</a>
+  <div class="ham" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="index.html">Home</a><a href="menu.html">Menu</a>
+  <a href="reservations.html">Reserve</a><a href="contact.html">Contact</a>
+</div>
+
+<div class="page-hdr">
+  <div class="hdr-bg"></div><div class="hdr-ov"></div>
+  <div class="hdr-content">
+    <div class="eyebrow">Get in Touch</div>
+    <h1>WE'D LOVE TO<br><span class="r">HEAR</span> <span class="a">YOU</span></h1>
+    <p class="sub">Questions, feedback, or just want to say the food was fire? We're here for all of it.</p>
+  </div>
+</div>
+
+<!-- CONTACT CARDS -->
+<div class="cc-row">
+  <div class="cc"><div class="cc-icon">📞</div><div class="cc-label">Phone</div><div class="cc-val"><a href="tel:58141890">5814 1890</a></div><div class="cc-note">Mon–Sun until 9 PM</div></div>
+  <div class="cc"><div class="cc-icon">✉️</div><div class="cc-label">Email</div><div class="cc-val"><a href="mailto:info@jays.co.ls">info@jays.co.ls</a></div><div class="cc-note">Reply within 24 hours</div></div>
+  <div class="cc"><div class="cc-icon">📍</div><div class="cc-label">Address</div><div class="cc-val">Opposite Lehakoe,<br>Moshoeshoe Road, Maseru</div><div class="cc-note">Right on the main road</div></div>
+  <div class="cc"><div class="cc-icon">🕘</div><div class="cc-label">Hours</div><div class="cc-val">Daily: Open</div><div class="cc-note">Closes at 9:00 PM</div></div>
+</div>
+
+<!-- SPLIT: map photo + form -->
+<div class="split">
+  <div class="map-side">
+    <div class="map-img">
+      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80" alt="Maseru Lesotho" loading="lazy">
+    </div>
+    <div class="map-content">
+      <h2>FIND US</h2>
+      <div class="map-addr">Moshoeshoe Road, Maseru</div>
+      <p>Opposite Lehakoe, right in the heart of Maseru city. Easy to reach from anywhere.</p>
+      <a href="https://maps.app.goo.gl/uxSCsRvXPW5ZpS1H6" target="_blank" class="btn-map">📍 Open in Google Maps</a>
+      <div class="hours-wrap">
+        <span class="hday">Mon – Fri</span><span class="htime">Open · Closes 9 PM</span>
+        <span class="hday">Saturday</span><span class="htime">Open · Closes 9 PM</span>
+        <span class="hday">Sunday</span><span class="htime">Open · Closes 9 PM</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-side">
+    <div class="div-bar"></div>
+    <h2 class="sh">SEND A MESSAGE</h2>
+    <p class="sp">Leave us a message and we'll get back to you. For urgent matters, call 5814 1890 directly.</p>
+    <form id="cForm" onsubmit="submitMsg(event)">
+      <div class="fg"><label>Your Name</label><input type="text" placeholder="Thabo Mokoena" required></div>
+      <div class="fg"><label>Phone or Email</label><input type="text" placeholder="+266 5800 0000 or you@email.com" required></div>
+      <div class="fg"><label>Subject</label><select><option>General Enquiry</option><option>Reservation</option><option>Private Lounge Booking</option><option>Feedback</option><option>Catering / Events</option><option>Other</option></select></div>
+      <div class="fg"><label>Message</label><textarea placeholder="Tell us what's on your mind..."></textarea></div>
+      <button type="submit" class="btn-submit">🔥 Send Message</button>
+    </form>
+    <div class="success" id="suc"><h3>✅ MESSAGE SENT!</h3><p>Thanks! We'll reply soon. Urgent? Call <a href="tel:58141890">5814 1890</a>.</p></div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 Jay's Restaurant, Maseru, Lesotho</span>
+  <span>Made with 🔥 in Lesotho</span>
+</footer>
+
+<script>
+  document.getElementById('ham').addEventListener('click',()=>document.getElementById('mobMenu').classList.toggle('open'));
+  document.querySelectorAll('#mobMenu a').forEach(a=>a.addEventListener('click',()=>document.getElementById('mobMenu').classList.remove('open')));
+  function submitMsg(e){e.preventDefault();document.getElementById('cForm').style.display='none';document.getElementById('suc').style.display='block';}
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}}),{threshold:.1});
+  document.querySelectorAll('.cc').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity .5s ease,transform .5s ease';io.observe(el);});
+</script>
+</body>
+</html>
