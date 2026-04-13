@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>266 JUNKIES — Basotho Streetwear</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;1,700&family=Space+Mono:wght@400;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --white: #F2EDE8;
+      --off-white: #D8D3CE;
+      --black: #080808;
+      --black-2: #101010;
+      --black-3: #1A1A1A;
+      --grey: #555;
+      --grey-light: #999;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    #cursor {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--white); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .2s, height .2s;
+    }
+    #cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid rgba(242,237,232,.5); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: width .25s ease, height .25s ease, border-color .2s;
+    }
+    body.cursor-hover #cursor { width: 16px; height: 16px; }
+    body.cursor-hover #cursor-ring { width: 52px; height: 52px; border-color: rgba(242,237,232,.25); }
+    body::after {
+      content:''; position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity:.028; pointer-events:none; z-index:9000;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 68px;
+      transition: background .4s, border .4s;
+    }
+    nav.scrolled {
+      background: rgba(8,8,8,.95); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 26px;
+      letter-spacing: .12em; color: var(--white); text-decoration: none;
+    }
+    .nav-logo sup {
+      font-family: 'Space Mono', monospace; font-size: 8px;
+      letter-spacing: .08em; vertical-align: super;
+      color: var(--grey-light); margin-left:3px;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 12px;
+      font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--grey-light); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 12px;
+      font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--black); background: var(--white);
+      padding: 9px 22px; text-decoration: none; transition: background .2s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-cta:hover { background: var(--off-white); }
+    .nav-cart-count {
+      background: var(--black); color: var(--white);
+      font-family: 'Space Mono', monospace; font-size: 9px;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .nav-hamburger span { display: block; width: 24px; height: 1.5px; background: var(--white); }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      position: fixed; inset: 0; background: var(--black); z-index: 490;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 36px;
+      transform: translateX(100%); transition: transform .4s cubic-bezier(.25,.46,.45,.94);
+    }
+    .mobile-menu.open { transform: translateX(0); }
+    .mobile-menu a {
+      font-family: 'Bebas Neue', sans-serif; font-size: 52px;
+      letter-spacing: .1em; color: var(--white); text-decoration: none;
+    }
+    .mobile-close {
+      position: absolute; top: 24px; right: 30px;
+      font-family: 'Space Mono', monospace; font-size: 12px;
+      color: var(--white); cursor: pointer;
+      background: none; border: none;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative; height: 100vh; min-height: 600px;
+      display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 0 40px 64px; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; overflow: hidden;
+    }
+    .hero-bg-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center center;
+      display: block;
+    }
+    /* dark overlay so text stays readable */
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.55) 40%, rgba(8,8,8,0.25) 100%),
+        linear-gradient(to right, rgba(8,8,8,0.5) 0%, transparent 60%);
+      z-index: 1;
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 2;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    /* hide the old diagonal — no longer needed */
+    .hero-diagonal { display: none; }
+    .hero-number {
+      position: absolute; right: 4%; top: 50%; transform: translateY(-50%);
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(180px, 22vw, 340px);
+      color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.06);
+      letter-spacing: -.02em; line-height: 1;
+      user-select: none; pointer-events: none; z-index: 3;
+    }
+    .hero-tag {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: .25em; text-transform: uppercase; color: var(--grey-light);
+      margin-bottom: 20px; display: flex; align-items: center; gap: 14px;
+      opacity: 0; transform: translateY(20px); animation: fadeUp .8s .3s forwards;
+      position: relative; z-index: 4;
+    }
+    .hero-tag::before { content:''; display:block; width:40px; height:1px; background: var(--grey); }
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 12vw, 170px); line-height: .93; letter-spacing: .01em;
+      color: var(--white); opacity: 0; transform: translateY(30px);
+      animation: fadeUp .9s .5s forwards;
+      position: relative; z-index: 4;
+    }
+    .hero-headline em { font-style: italic; color: transparent; -webkit-text-stroke: 1.5px var(--white); }
+    .hero-sub {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 300;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--grey-light);
+      margin-top: 20px; max-width: 420px;
+      opacity: 0; transform: translateY(20px); animation: fadeUp .8s .75s forwards;
+      position: relative; z-index: 4;
+    }
+    .hero-actions {
+      display: flex; align-items: center; gap: 24px; margin-top: 40px;
+      opacity: 0; transform: translateY(20px); animation: fadeUp .8s 1s forwards;
+      position: relative; z-index: 4;
+    }
+    .btn-primary {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--black);
+      background: var(--white); padding: 16px 40px; text-decoration: none;
+      display: inline-block; transition: background .2s, transform .2s; position: relative;
+    }
+    .btn-primary:hover { background: var(--off-white); transform: translateY(-2px); }
+    .btn-ghost {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--white);
+      text-decoration: none; display: flex; align-items: center; gap: 10px; transition: gap .2s;
+    }
+    .btn-ghost:hover { gap: 16px; }
+    .btn-ghost::after { content: '→'; font-family: 'Space Mono', monospace; font-size: 16px; }
+    .hero-scroll {
+      position: absolute; bottom: 40px; right: 40px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      opacity: 0; animation: fadeIn 1s 1.5s forwards;
+    }
+    .hero-scroll span {
+      font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--grey); writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--grey), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      border-top: 1px solid rgba(255,255,255,.08); border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 18px 0; overflow: hidden; background: var(--black-2);
+    }
+    .marquee-track { display: flex; white-space: nowrap; animation: marquee 22s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
+    .marquee-item {
+      font-family: 'Bebas Neue', sans-serif; font-size: 14px;
+      letter-spacing: .3em; text-transform: uppercase; color: var(--grey);
+      padding: 0 40px; display: flex; align-items: center; gap: 40px;
+    }
+    .marquee-item::after { content:'◆'; font-size: 8px; color: rgba(255,255,255,.2); }
+
+    /* SECTIONS */
+    section { padding: 120px 40px; }
+    .section-label {
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: .28em;
+      text-transform: uppercase; color: var(--grey);
+      display: flex; align-items: center; gap: 14px; margin-bottom: 48px;
+    }
+    .section-label::before { content: attr(data-num); color: rgba(255,255,255,.15); font-size: 11px; }
+    .section-label::after { content:''; flex:1; height:1px; background: rgba(255,255,255,.07); }
+
+    /* DROPS */
+    .drops { background: var(--black); }
+    .drops-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 56px; }
+    .drops-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 80px); letter-spacing: .02em; line-height: 1; }
+    .drops-link {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 600;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--grey-light);
+      text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color .2s, gap .2s;
+    }
+    .drops-link:hover { color: var(--white); gap: 14px; }
+    .drops-link::after { content: '→'; }
+    .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .product-card { position: relative; overflow: hidden; background: var(--black-3); cursor: none; }
+    .product-card:first-child { grid-row: span 2; }
+    .product-placeholder {
+      width: 100%; aspect-ratio: 3/4;
+      background: var(--black-3);
+      display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+      transition: transform .6s cubic-bezier(.25,.46,.45,.94);
+    }
+    .product-card:first-child .product-placeholder { aspect-ratio: auto; height: 100%; min-height: 540px; }
+    .product-card:hover .product-placeholder { transform: scale(1.04); }
+    .placeholder-inner {
+      position: relative; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    }
+    .placeholder-inner::before {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(-45deg, transparent, transparent 12px, rgba(255,255,255,.02) 12px, rgba(255,255,255,.02) 13px);
+    }
+    .placeholder-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(70px, 10vw, 120px);
+      color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.12);
+      line-height: 1; position: relative; z-index:1; letter-spacing: -.02em;
+    }
+    .placeholder-tag {
+      font-family: 'Space Mono', monospace; font-size: 9px;
+      letter-spacing: .2em; color: rgba(255,255,255,.25); text-transform: uppercase;
+      position: relative; z-index: 1;
+    }
+    .product-info {
+      padding: 20px 20px 24px; background: var(--black-2);
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+    .product-name {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--white); margin-bottom: 4px;
+    }
+    .product-meta { display: flex; justify-content: space-between; align-items: center; }
+    .product-price { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--grey-light); }
+    .product-badge {
+      font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: .15em;
+      text-transform: uppercase; color: var(--black); background: var(--white); padding: 4px 10px;
+    }
+    .product-overlay {
+      position: absolute; inset: 0; background: rgba(8,8,8,.75);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .3s;
+    }
+    .product-card:hover .product-overlay { opacity: 1; }
+    .overlay-btn {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--black); background: var(--white);
+      padding: 14px 36px; text-decoration: none;
+      transform: translateY(10px); transition: transform .3s;
+    }
+    .product-card:hover .overlay-btn { transform: translateY(0); }
+
+    /* STATEMENT */
+    .statement {
+      background: var(--white); padding: 100px 40px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .statement::before {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(0,0,0,.025) 20px, rgba(0,0,0,.025) 21px);
+    }
+    .statement-headline {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 9vw, 130px);
+      color: var(--black); line-height: .95; letter-spacing: .02em; position: relative; z-index: 1;
+    }
+    .statement-headline em { font-style: italic; color: transparent; -webkit-text-stroke: 2px var(--black); }
+    .statement-sub {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: .25em;
+      text-transform: uppercase; color: rgba(8,8,8,.45); margin-top: 20px; position: relative; z-index: 1;
+    }
+
+    /* ABOUT */
+    .about { background: var(--black-2); padding: 120px 40px; position: relative; overflow: hidden; }
+    .about-big-text {
+      position: absolute; bottom: -20px; left: -10px;
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(120px, 18vw, 260px);
+      color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.04);
+      white-space: nowrap; pointer-events: none; user-select: none;
+    }
+    .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; position: relative; z-index: 1; }
+    .about-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 88px); line-height: .95; letter-spacing: .02em; margin-bottom: 32px; }
+    .about-headline em { font-style: italic; -webkit-text-stroke: 1px var(--white); color: transparent; }
+    .about-body { font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--grey-light); max-width: 460px; margin-bottom: 24px; }
+    .about-body strong { color: var(--white); font-weight: 500; }
+    .about-stats { display: flex; gap: 48px; margin-top: 20px; }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 52px; line-height: 1; color: var(--white); letter-spacing: .04em; }
+    .stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--grey); margin-top: 4px; }
+    .about-right {}
+    .about-img-main {
+      width: 100%; aspect-ratio: 4/5; background: var(--black-3);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .about-img-main::before {
+      content:''; position:absolute; inset:0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.015) 15px, rgba(255,255,255,.015) 16px);
+    }
+    .about-img-text {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(60px, 9vw, 110px);
+      color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.12);
+      letter-spacing: .05em; text-align: center; line-height: 1;
+    }
+    .about-badge {
+      background: var(--black); border: 1px solid rgba(255,255,255,.1);
+      padding: 24px; margin-top: 2px; display: flex; align-items: center; gap: 20px;
+    }
+    .badge-num { font-family: 'Bebas Neue', sans-serif; font-size: 44px; line-height: 1; color: var(--white); letter-spacing: .05em; }
+    .badge-info {}
+    .badge-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--white); }
+    .badge-sub { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: .18em; color: var(--grey); margin-top: 3px; }
+
+    /* CATEGORIES */
+    .categories { background: var(--black); }
+    .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+    .cat-card { position: relative; overflow: hidden; cursor: none; }
+    .cat-visual {
+      aspect-ratio: 2/3; background: var(--black-3);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: relative; overflow: hidden; transition: transform .5s cubic-bezier(.25,.46,.45,.94);
+    }
+    .cat-card:hover .cat-visual { transform: scale(1.03); }
+    .cat-visual::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,.85) 0%, transparent 60%); z-index: 1;
+    }
+    .cat-pattern { position: absolute; inset: 0; }
+    .cat-bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; opacity: 0.55; transition: opacity .5s, transform .5s cubic-bezier(.25,.46,.45,.94); }
+    .cat-card:hover .cat-bg-img { opacity: 0.75; transform: scale(1.05); }
+    .cat-p1 { background: repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0px, transparent 1px, transparent 30px), repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0px, transparent 1px, transparent 30px); }
+    .cat-p2 { background: repeating-conic-gradient(rgba(255,255,255,.03) 0% 25%, transparent 0% 50%) 0 0 / 30px 30px; }
+    .cat-p3 { background: repeating-linear-gradient(-45deg, rgba(255,255,255,.025) 0px, rgba(255,255,255,.025) 1px, transparent 1px, transparent 20px); }
+    .cat-p4 { background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.06) 0%, transparent 60%); }
+    .cat-icon { font-family: 'Bebas Neue', sans-serif; font-size: clamp(50px, 7vw, 80px); color: rgba(255,255,255,.07); letter-spacing: .05em; position: relative; z-index: 0; }
+    .cat-label { position: absolute; bottom: 20px; left: 20px; right: 20px; z-index: 2; }
+    .cat-name { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: .1em; color: var(--white); line-height: 1; }
+    .cat-count { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: .2em; color: var(--grey-light); margin-top: 4px; }
+
+    /* SOCIAL */
+    .social-strip { background: var(--black-2); padding: 100px 40px; }
+    .social-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+    .social-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 5vw, 64px); letter-spacing: .02em; line-height: 1; }
+    .social-handle { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: .15em; color: var(--grey-light); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color .2s; }
+    .social-handle:hover { color: var(--white); }
+    .social-handle::before { content: '@'; color: var(--grey); }
+    .social-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+    .social-post { aspect-ratio: 1; background: var(--black-3); position: relative; overflow: hidden; cursor: none; }
+    .social-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .social-inner:nth-child(even) { background: #0E0E0E; }
+    .social-icon { font-family: 'Bebas Neue', sans-serif; font-size: clamp(22px, 3vw, 38px); color: rgba(255,255,255,.08); letter-spacing: .05em; text-align: center; line-height: 1.2; }
+    .social-hover { position: absolute; inset: 0; background: rgba(8,8,8,.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .3s; }
+    .social-post:hover .social-hover { opacity: 1; }
+    .ig-icon { width: 22px; height: 22px; border: 1.5px solid rgba(255,255,255,.6); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .ig-dot { width: 8px; height: 8px; border: 1.5px solid rgba(255,255,255,.6); border-radius: 50%; }
+
+    /* NEWSLETTER */
+    .newsletter { background: var(--black); padding: 100px 40px; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; overflow: hidden; }
+    .newsletter::before { content: '266'; position: absolute; font-family: 'Bebas Neue', sans-serif; font-size: clamp(200px, 30vw, 400px); color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.03); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; user-select: none; white-space: nowrap; }
+    .nl-eye { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: var(--grey); margin-bottom: 20px; position: relative; }
+    .nl-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 80px); line-height: 1; letter-spacing: .02em; margin-bottom: 12px; position: relative; }
+    .nl-sub { font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 300; color: var(--grey-light); max-width: 400px; line-height: 1.6; margin-bottom: 40px; position: relative; }
+    .nl-form { display: flex; gap: 0; max-width: 500px; width: 100%; position: relative; }
+    .nl-form input { flex: 1; background: var(--black-3); border: 1px solid rgba(255,255,255,.1); border-right: none; color: var(--white); padding: 16px 24px; font-family: 'Barlow', sans-serif; font-size: 14px; outline: none; transition: border-color .2s; }
+    .nl-form input::placeholder { color: var(--grey); }
+    .nl-form input:focus { border-color: rgba(255,255,255,.3); }
+    .nl-form button { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--black); background: var(--white); border: none; padding: 16px 28px; cursor: none; transition: background .2s; }
+    .nl-form button:hover { background: var(--off-white); }
+    .nl-fine { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: .1em; color: var(--grey); margin-top: 16px; position: relative; }
+
+    /* FOOTER */
+    footer { background: var(--black-2); border-top: 1px solid rgba(255,255,255,.07); padding: 64px 40px 36px; }
+    .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 56px; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: .1em; color: var(--white); display: block; margin-bottom: 12px; }
+    .footer-desc { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 300; line-height: 1.7; color: var(--grey); max-width: 240px; }
+    .footer-socials { display: flex; gap: 10px; margin-top: 24px; }
+    .footer-social { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--grey-light); text-decoration: none; border: 1px solid rgba(255,255,255,.1); padding: 8px 14px; transition: color .2s, border-color .2s; }
+    .footer-social:hover { color: var(--white); border-color: rgba(255,255,255,.3); }
+    .footer-col-title { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; color: var(--white); margin-bottom: 20px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 300; color: var(--grey); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.07); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: .12em; color: var(--grey); }
+    .footer-code { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: .12em; color: rgba(255,255,255,.15); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes scrollPulse { 0%, 100% { opacity: 1; } 50% { opacity: .2; } }
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: .1s; }
+    .reveal-d2 { transition-delay: .2s; }
+    .reveal-d3 { transition-delay: .3s; }
+    .reveal-d4 { transition-delay: .4s; }
+
+    /* RESPONSIVE */
+    @media (max-width: 1200px) {
+      .hero-diagonal { width: 52%; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 1100px) {
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .product-card:first-child { grid-row: span 1; }
+      .product-card:first-child .product-placeholder { min-height: auto; aspect-ratio: 3/4; height: auto; }
+      .about-inner { grid-template-columns: 1fr 1fr; gap: 48px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 900px) {
+      .hero-diagonal { width: 60%; }
+      .about-inner { grid-template-columns: 1fr; gap: 48px; }
+      .about-right { max-width: 480px; width: 100%; }
+      .about-img-main { aspect-ratio: 16/9; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      section { padding: 72px 20px; }
+      .statement { padding: 72px 20px; }
+      .hero { padding: 0 20px 56px; min-height: 100svh; }
+      .hero-number { font-size: clamp(100px, 20vw, 200px); }
+      .hero-scroll { display: none; }
+      .drops-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
+      .product-card:first-child { grid-column: span 2; }
+      .product-card:first-child .product-placeholder { aspect-ratio: 16/9; height: auto; min-height: unset; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
+      .social-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .social-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
+      .social-post:nth-child(4), .social-post:nth-child(5) { display: none; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+      .nl-form { flex-direction: column; }
+      .nl-form input { border-right: 1px solid rgba(255,255,255,.1); border-bottom: none; }
+      footer { padding: 48px 20px 28px; }
+    }
+    @media (max-width: 520px) {
+      .hero { padding: 0 16px 48px; }
+
+      .hero-actions { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .about-stats { flex-wrap: wrap; gap: 24px; }
+      .products-grid { grid-template-columns: 1fr; }
+      .product-card:first-child { grid-column: span 1; }
+      .product-card:first-child .product-placeholder { aspect-ratio: 3/4; }
+      .cat-grid { grid-template-columns: 1fr 1fr; }
+      .social-grid { grid-template-columns: 1fr 1fr; }
+      .social-post:nth-child(3), .social-post:nth-child(4), .social-post:nth-child(5) { display: none; }
+      .footer-top { grid-template-columns: 1fr; gap: 28px; }
+      section { padding: 56px 16px; }
+      .statement { padding: 56px 16px; }
+      .social-strip { padding: 72px 16px; }
+      .newsletter { padding: 72px 16px; }
+      footer { padding: 40px 16px 24px; }
+      .nl-form { max-width: 100%; }
+    }
+    @media (hover: none) { #cursor, #cursor-ring { display: none; } body { cursor: auto; } }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕ CLOSE</button>
+  <a href="#drops" onclick="closeMobile()">Drops</a>
+  <a href="#about" onclick="closeMobile()">Story</a>
+  <a href="shop.html">Shop</a>
+  <a href="#social" onclick="closeMobile()">Lookbook</a>
+  <a href="#newsletter" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="index.html" class="nav-logo">266 JUNKIES<sup>LS</sup></a>
+  <ul class="nav-links">
+    <li><a href="#drops">Drops</a></li>
+    <li><a href="#about">Story</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="#social">Lookbook</a></li>
+  </ul>
+  <a href="shop.html" class="nav-cta" id="homeCartBtn">
+    Cart <div class="nav-cart-count" id="homeCartCount">0</div>
+  </a>
+  <div class="nav-hamburger" id="navHamburger" onclick="openMobile()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <img class="hero-bg-img" src="images/img_000.jpg" alt="266 Junkies" alt="266 Junkies Lookbook"/>
+    <div class="hero-grid"></div>
+  </div>
+  <div class="hero-tag">— Born in Lesotho · Worn by the streets</div>
+  <h1 class="hero-headline">BUILT FOR<br/>THE <em>STREET</em></h1>
+  <p class="hero-sub">Basotho streetwear for those who move with purpose. No noise. Just quality.</p>
+  <div class="hero-actions">
+    <a href="shop.html" class="btn-primary">Shop New Drops</a>
+    <a href="#about" class="btn-ghost">Our Story</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">266 Junkies</div><div class="marquee-item">Maseru</div>
+    <div class="marquee-item">Kingdom in the Sky</div><div class="marquee-item">Streetwear</div>
+    <div class="marquee-item">Lesotho</div><div class="marquee-item">New Drop</div>
+    <div class="marquee-item">Born Different</div><div class="marquee-item">266 Junkies</div>
+    <div class="marquee-item">Maseru</div><div class="marquee-item">Kingdom in the Sky</div>
+    <div class="marquee-item">Streetwear</div><div class="marquee-item">Lesotho</div>
+    <div class="marquee-item">New Drop</div><div class="marquee-item">Born Different</div>
+  </div>
+</div>
+
+<!-- DROPS -->
+<section class="drops" id="drops">
+  <div class="section-label" data-num="01">Latest Drops</div>
+  <div class="drops-header">
+    <h2 class="drops-title reveal">NEW<br/>ARRIVALS</h2>
+    <a href="shop.html" class="drops-link reveal reveal-d2">View All</a>
+  </div>
+  <div class="products-grid reveal">
+    <div class="product-card">
+      <div class="product-placeholder" style="position:relative;"><img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="images/img_001.jpg" alt="266 Signature Tee"/></div>
+      <div class="product-info">
+        <div class="product-name">266 Signature Tee</div>
+        <div class="product-meta">
+          <span class="product-price">M 450</span>
+          <span class="product-badge">New</span>
+        </div>
+      </div>
+      <div class="product-overlay"><a href="shop.html?product=0" class="overlay-btn">Quick Add</a></div>
+    </div>
+    <div class="product-card">
+      <div class="product-placeholder" style="position:relative;"><img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="images/img_002.jpg" alt="Junkies Heavyweight"/></div>
+      <div class="product-info">
+        <div class="product-name">Junkies Heavyweight Hoodie</div>
+        <div class="product-meta">
+          <span class="product-price">M 980</span>
+          <span class="product-badge">Hot</span>
+        </div>
+      </div>
+      <div class="product-overlay"><a href="shop.html?product=4" class="overlay-btn">Quick Add</a></div>
+    </div>
+    <div class="product-card">
+      <div class="product-placeholder" style="position:relative;"><img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="images/img_003.jpg" alt="Kingdom Cargo Pants"/></div>
+      <div class="product-info">
+        <div class="product-name">Kingdom Cargo Pants</div>
+        <div class="product-meta">
+          <span class="product-price">M 850</span>
+        </div>
+      </div>
+      <div class="product-overlay"><a href="shop.html?product=9" class="overlay-btn">Quick Add</a></div>
+    </div>
+    <div class="product-card">
+      <div class="product-placeholder" style="position:relative;"><img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="images/img_004.jpg" alt="Mountain Varsity Jacket"/></div>
+      <div class="product-info">
+        <div class="product-name">Mountain Varsity Jacket</div>
+        <div class="product-meta">
+          <span class="product-price">M 1,400</span>
+          <span class="product-badge">Limited</span>
+        </div>
+      </div>
+      <div class="product-overlay"><a href="shop.html?product=16" class="overlay-btn">Quick Add</a></div>
+    </div>
+    <div class="product-card">
+      <div class="product-placeholder" style="position:relative;"><img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="images/img_005.jpg" alt="266 5-Panel Cap"/></div>
+      <div class="product-info">
+        <div class="product-name">266 5-Panel Cap</div>
+        <div class="product-meta">
+          <span class="product-price">M 280</span>
+        </div>
+      </div>
+      <div class="product-overlay"><a href="shop.html?product=12" class="overlay-btn">Quick Add</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<div class="statement">
+  <h2 class="statement-headline">FROM THE<br/><em>MOUNTAIN</em><br/>KINGDOM</h2>
+  <p class="statement-sub">266 · Lesotho's Calling Code · The Junkies Are Here</p>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-big-text">JUNKIES</div>
+  <div class="section-label" data-num="02">Our Story</div>
+  <div class="about-inner">
+    <div class="about-left">
+      <h2 class="about-headline reveal">MADE BY<br/>BASOTHO<br/><em>FOR THE</em><br/>WORLD</h2>
+      <p class="about-body reveal reveal-d1">266 Junkies was born in the streets of <strong>Maseru, Lesotho</strong> — a small kingdom with a massive spirit. Founded by young Basotho creatives who refused to wait for an invitation, we create clothing that carries the weight of <strong>where we're from</strong>.</p>
+      <p class="about-body reveal reveal-d2">Every piece is a statement. Black and white because <strong>we don't need colour to stand out</strong>. Clean lines, heavy fabric, zero compromise. Built for the mountains we were raised on.</p>
+      <div class="about-stats reveal reveal-d3">
+        <div class="stat"><div class="stat-num">266</div><div class="stat-label">Our Code</div></div>
+        <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Basotho</div></div>
+        <div class="stat"><div class="stat-num">∞</div><div class="stat-label">No Limits</div></div>
+      </div>
+    </div>
+    <div class="about-right reveal reveal-d2">
+      <div class="about-img-main" style="position:relative;"><img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;" src="images/img_006.jpg" alt="266 Junkies"/></div>
+      <div class="about-badge">
+        <div class="badge-num">266</div>
+        <div class="badge-info">
+          <div class="badge-title">Kingdom in the Sky</div>
+          <div class="badge-sub">Maseru · Lesotho · EST. by the Youth</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories" id="categories">
+  <div class="section-label" data-num="03">Browse by Category</div>
+  <div class="cat-grid reveal">
+    <div class="cat-card" style="cursor:pointer;" onclick="window.location.href=this.dataset.href" 
+      <div class="cat-visual">
+        <img class="cat-bg-img" src="images/img_007.jpg" alt="T-Shirts"/>
+        <div class="cat-icon">TEE</div>
+        <div class="cat-label"><div class="cat-name">T-Shirts</div><div class="cat-count">12 styles</div></div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-visual">
+        <img class="cat-bg-img" src="images/img_008.jpg" alt="Hoodies"/>
+        <div class="cat-icon">HDD</div>
+        <div class="cat-label"><div class="cat-name">Hoodies</div><div class="cat-count">8 styles</div></div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-visual">
+        <img class="cat-bg-img" src="images/img_009.jpg" alt="Bottoms"/>
+        <div class="cat-icon">BTM</div>
+        <div class="cat-label"><div class="cat-name">Bottoms</div><div class="cat-count">7 styles</div></div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-visual">
+        <img class="cat-bg-img" src="images/img_010.jpg" alt="Accessories"/>
+        <div class="cat-icon">ACC</div>
+        <div class="cat-label"><div class="cat-name">Accessories</div><div class="cat-count">10 pieces</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section class="social-strip" id="social">
+  <div class="section-label" data-num="04">Lookbook</div>
+  <div class="social-header">
+    <h2 class="social-title reveal">AS SEEN ON<br/>THE STREET</h2>
+    <a href="https://instagram.com/266junkies" class="social-handle reveal reveal-d2" target="_blank">266junkies</a>
+  </div>
+  <div class="social-grid reveal">
+    <div class="social-post" style="position:relative;overflow:hidden;"><img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="images/img_011.jpg" alt="lookbook"/><div class="social-hover"><div class="ig-icon"><div class="ig-dot"></div></div></div></div>
+    <div class="social-post" style="position:relative;overflow:hidden;"><img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="images/img_012.jpg" alt="lookbook"/><div class="social-hover"><div class="ig-icon"><div class="ig-dot"></div></div></div></div>
+    <div class="social-post" style="position:relative;overflow:hidden;"><img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="images/img_013.jpg" alt="lookbook"/><div class="social-hover"><div class="ig-icon"><div class="ig-dot"></div></div></div></div>
+    <div class="social-post" style="position:relative;overflow:hidden;"><img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="images/img_014.jpg" alt="lookbook"/><div class="social-hover"><div class="ig-icon"><div class="ig-dot"></div></div></div></div>
+    <div class="social-post"><div class="social-inner"><div class="social-icon">NEW<br/>DROP</div></div><div class="social-hover"><div class="ig-icon"><div class="ig-dot"></div></div></div></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter" id="newsletter">
+  <div class="nl-eye">Don't miss a drop</div>
+  <h2 class="nl-title reveal">GET ON THE LIST</h2>
+  <p class="nl-sub reveal reveal-d1">Early access to new drops, exclusive releases, and straight-from-Maseru content.</p>
+  <form class="nl-form reveal reveal-d2" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Your email address" required id="emailInput"/>
+    <button type="submit" id="subBtn">Subscribe</button>
+  </form>
+  <p class="nl-fine reveal reveal-d3">No spam. Unsubscribe anytime. Just heat.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <span class="footer-logo">266 JUNKIES</span>
+      <p class="footer-desc">Basotho streetwear born in the Kingdom in the Sky. Maseru-built. World-ready.</p>
+      <div class="footer-socials">
+        <a href="https://instagram.com/266junkies" class="footer-social" target="_blank">IG</a>
+        <a href="#" class="footer-social">TT</a>
+        <a href="#" class="footer-social">FB</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Shop</div>
+      <ul class="footer-links">
+        <li><a href="shop.html">New Arrivals</a></li>
+        <li><a href="shop.html?cat=tshirts">T-Shirts</a></li>
+        <li><a href="shop.html?cat=hoodies">Hoodies</a></li>
+        <li><a href="shop.html?cat=bottoms">Bottoms</a></li>
+        <li><a href="shop.html?cat=accessories">Accessories</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Brand</div>
+      <ul class="footer-links">
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Lookbook</a></li>
+        <li><a href="#">Stockists</a></li>
+        <li><a href="#">Collabs</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Help</div>
+      <ul class="footer-links">
+        <li><a href="#">Sizing Guide</a></li>
+        <li><a href="#">Shipping & Returns</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 266 Junkies. All rights reserved. Maseru, Lesotho.</span>
+    <span class="footer-code">+266 · Kingdom in the Sky</span>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+  (function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+  document.querySelectorAll('a,button,.product-card,.cat-card,.social-post').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+
+  // Nav
+  window.addEventListener('scroll',()=>document.getElementById('mainNav').classList.toggle('scrolled',scrollY>40));
+
+  // Mobile
+  function openMobile(){document.getElementById('mobileMenu').classList.add('open');}
+  function closeMobile(){document.getElementById('mobileMenu').classList.remove('open');}
+  document.getElementById('mobileClose').addEventListener('click',closeMobile);
+
+  // Reveal
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // Newsletter
+  function handleSub(e){
+    e.preventDefault();
+    const btn=document.getElementById('subBtn');
+    btn.textContent='✓ You\'re In';
+    btn.style.background='#c8c3be';
+    document.getElementById('emailInput').value='';
+    setTimeout(()=>{btn.textContent='Subscribe';btn.style.background='';},3000);
+  }
+
+  // ── Cart sync from localStorage ─────────────────────────────
+  function syncCart(){
+    const c = parseInt(localStorage.getItem('junkies_cart') || '0');
+    const el = document.getElementById('homeCartCount');
+    if(el) el.textContent = c;
+  }
+  syncCart();
+  window.addEventListener('storage', syncCart);
+
+  // ── Category cards → shop with filter ──────────────────────
+  const catLinks = ['tshirts','hoodies','bottoms','accessories'];
+  document.querySelectorAll('.cat-card').forEach((card, i) => {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+      window.location.href = 'shop.html?cat=' + (catLinks[i] || 'all');
+    });
+  });
+</script>
+</body>
+</html>
